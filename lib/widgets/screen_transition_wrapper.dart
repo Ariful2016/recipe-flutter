@@ -40,7 +40,7 @@ class ScreenTransitionWrapper extends StatefulWidget {
   const ScreenTransitionWrapper({
     super.key,
     required this.child,
-    this.duration = const Duration(milliseconds: 600),
+    this.duration = const Duration(milliseconds: 400),
   });
 
   @override
