@@ -1,0 +1,34 @@
+name: recipe_flutter
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  concentric_transition: ^1.0.3
+  flutter_card_swiper: ^7.0.2
+  go_router: ^13.1.0
+  shimmer:
+  google_fonts:
+  flutter_screenutil:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/
+
+
