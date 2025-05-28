@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:recipe_flutter/core/app_style.dart';
-import 'package:recipe_flutter/core/constants/constants.dart';
-import 'package:recipe_flutter/widgets/button/custom_button.dart';
-import 'package:recipe_flutter/widgets/reusable_text.dart';
 
 import '../../data/models/swipe_card/swipe_card_model.dart';
 import '../../widgets/screen_transition_wrapper.dart';
 import '../../widgets/swipe_card/profile_card.dart';
 
+/// Created on 27-05-2025
 class TinderSwipeScreen extends StatefulWidget {
   TinderSwipeScreen({super.key});
 
