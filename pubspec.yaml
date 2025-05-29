@@ -18,6 +18,7 @@ dependencies:
   shimmer:
   google_fonts:
   flutter_screenutil:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:
