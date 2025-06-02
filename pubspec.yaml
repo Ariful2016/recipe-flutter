@@ -20,6 +20,7 @@ dependencies:
   flutter_screenutil:
   permission_handler:
   flutter_native_splash:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
