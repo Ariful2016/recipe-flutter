@@ -19,6 +19,7 @@ dependencies:
   google_fonts:
   flutter_screenutil:
   permission_handler:
+  flutter_native_splash:
 
 dev_dependencies:
   flutter_test:
