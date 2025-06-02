@@ -7,13 +7,13 @@ import 'package:recipe_flutter/widgets/screen_transition_wrapper.dart';
 
 class BottomNavigation extends StatefulWidget {
   final int currentIndex;
-  final Function(int) onTab;
+  final Function(int) onTap;
   final GlobalKey<ScreenTransitionWrapperState>? animationKey;
 
   const BottomNavigation(
       {super.key,
       required this.currentIndex,
-      required this.onTab,
+      required this.onTap,
       this.animationKey});
 
   @override
@@ -41,11 +41,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
       onTap: (index) {
         if (widget.animationKey?.currentState != null) {
           widget.animationKey?.currentState!.triggerExitAnimation(() {
-            context.go(_routes[index]);
+            widget.onTap(index);
           });
         } else {
-          widget.onTab(index);
-          context.go(_routes[index]);
+          widget.onTap(index);
         }
       },
       type: BottomNavigationBarType.fixed,
