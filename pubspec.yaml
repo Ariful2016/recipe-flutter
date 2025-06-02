@@ -21,6 +21,12 @@ dependencies:
   permission_handler:
   flutter_native_splash:
   shared_preferences:
+  firebase_core:
+  firebase_auth:
+  firebase_analytics:
+  firebase_database:
+  cloud_firestore:
+  firebase_crashlytics:
 
 dev_dependencies:
   flutter_test:
