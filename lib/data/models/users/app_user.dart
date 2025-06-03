@@ -4,7 +4,7 @@ class AppUser {
   final String email;
   final String contactNo;
   final String address;
-  final String photoUrl;
+  final String? photoUrl;
 
   AppUser(
       {required this.uid,
@@ -12,7 +12,7 @@ class AppUser {
       required this.email,
       required this.contactNo,
       required this.address,
-      required this.photoUrl});
+        this.photoUrl});
 
   Map<String, dynamic> toMap(){
     return{
