@@ -4,19 +4,22 @@ import 'package:recipe_flutter/data/models/users/app_user.dart';
 import 'package:recipe_flutter/data/models/users/register_state.dart';
 import 'package:recipe_flutter/data/repositories/auth/auth_repository.dart';
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) => AuthRepository());
+final authRepositoryProvider =
+    Provider<AuthRepository>((ref) => AuthRepository());
 
-final authStateProvider = StreamProvider<User?> ((ref) {
+final authStateProvider = StreamProvider<User?>((ref) {
   return ref.watch(authRepositoryProvider).authStateChange;
 });
 
-final userDataProvider = FutureProvider.family<AppUser?, String>((ref, uid) async {
+final userDataProvider =
+    FutureProvider.family<AppUser?, String>((ref, uid) async {
   final repository = ref.watch(authRepositoryProvider);
   return await repository.getUserData(uid);
 });
 
-class RegisterViewModel extends StateNotifier<RegisterState>{
+class RegisterViewModel extends StateNotifier<RegisterState> {
   final AuthRepository _repository;
+
   RegisterViewModel(this._repository) : super(RegisterState());
 
   Future<void> register({
@@ -26,21 +29,27 @@ class RegisterViewModel extends StateNotifier<RegisterState>{
     required String contactNo,
     required String address,
     String? photoUrl,
-}) async{
+  }) async {
     state = state.copyWith(isLoading: true, error: null);
-    try{
+    try {
       final user = AppUser(
-          uid: '',
-          name: name,
-          email: email,
-          contactNo: contactNo,
-          address: address,
-          photoUrl: photoUrl,
+        uid: '',
+        name: name,
+        email: email,
+        contactNo: contactNo,
+        address: address,
+        photoUrl: photoUrl,
       );
       await _repository.registerUser(user, password);
       state = state.copyWith(isLoading: false, isSuccess: true);
-    }catch(e){
+    } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 }
+
+final registerProvider =
+    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return RegisterViewModel(repository);
+});
