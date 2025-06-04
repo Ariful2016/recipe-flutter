@@ -6,8 +6,9 @@ import 'package:recipe_flutter/core/app_style.dart';
 import 'package:recipe_flutter/core/constants/constants.dart';
 import 'package:recipe_flutter/viewmodels/auth/register_viewmodel.dart';
 import 'package:recipe_flutter/widgets/reusable_text.dart';
-
 import '../../util/validation.dart';
+import '../../widgets/button/custom_button.dart';
+import '../../widgets/dialog/custom_alert_dialog.dart';
 import '../../widgets/edit_text/custom_text_field.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -17,9 +18,7 @@ class RegisterScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends ConsumerState<RegisterScreen>{
-
-
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -41,20 +40,49 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>{
   Widget build(BuildContext context) {
     final registerState = ref.watch(registerProvider);
 
-    ref.listen(registerProvider, (previous, next){
-      if(next.isSuccess && previous?.isSuccess != true){
+   /* ref.listen(registerProvider, (previous, next) {
+      if (next.isSuccess && previous?.isSuccess != true) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: ReusableText(text: 'Registration Successful', style: appStyle(12.sp, kWhite, FontWeight.w400)),
-            backgroundColor: kPrimary,
-            duration: const Duration(seconds: 2)
-          ),
+              content: ReusableText(
+                  text: 'Registration Successful',
+                  style: appStyle(12.sp, kWhite, FontWeight.w400)),
+              backgroundColor: kPrimary,
+              duration: const Duration(seconds: 2)),
         );
-        Future.delayed(const Duration(seconds: 2), (){
-          if(context.mounted){
+        Future.delayed(const Duration(seconds: 2), () {
+          if (context.mounted) {
             context.goNamed('login');
           }
         });
+      }
+    });*/
+
+    ref.listen(registerProvider, (previous, next) {
+      if (next.isSuccess) {
+        showCustomAlertDialog(
+          context,
+          type: AlertType.success,
+          title: 'Success',
+          message: 'Registration successful!',
+          primaryButtonAction: () {
+            Navigator.of(context).pop();
+            context.goNamed('login');
+          },
+        );
+      } else if (next.error != null) {
+        showCustomAlertDialog(
+          context,
+          type: AlertType.error,
+          title: 'Error',
+          message: next.error.toString(),
+          primaryButtonText: 'Retry',
+          secondaryButtonText: 'Cancel',
+          primaryButtonAction: () {
+            _register();
+          },
+          secondaryButtonAction: () => Navigator.of(context).pop()
+        );
       }
     });
 
@@ -79,21 +107,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>{
                     key: _formKey,
                     child: Column(
                       children: [
-                      CustomTextField(
-                      controller: _nameController,
-                      labelText: nameLevelText,
-                      hintText: nameHintText,
-                      icon: Icons.person,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return nameEmptyText;
-                        }
-                        if (value.length > 100) {
-                          return nameLevelText;
-                        }
-                        return null;
-                      },
-                    ),
+                        CustomTextField(
+                          controller: _nameController,
+                          labelText: nameLevelText,
+                          hintText: nameHintText,
+                          icon: Icons.person,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return nameEmptyText;
+                            }
+                            if (value.length > 100) {
+                              return nameLevelText;
+                            }
+                            return null;
+                          },
+                        ),
                         CustomTextField(
                           controller: _emailController,
                           labelText: emailLevelText,
@@ -127,19 +155,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>{
                           },
                         ),
                         CustomTextField(
-                          controller: _contactController,
-                          labelText: contactLevelText,
-                          hintText: contactHintText,
-                          icon: Icons.phone,
-                          keyboardType: TextInputType.number,
-                          validator: (value) => validateContactNo(value)
-                        ),
+                            controller: _contactController,
+                            labelText: contactLevelText,
+                            hintText: contactHintText,
+                            icon: Icons.phone,
+                            keyboardType: TextInputType.number,
+                            validator: (value) => validateContactNo(value)),
                         CustomTextField(
                           controller: _addressController,
                           labelText: addressLevelText,
                           hintText: addressHintText,
                           icon: Icons.location_on,
-                          maxLines: 3,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return addressEmptyText;
@@ -147,35 +173,34 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>{
                             return null;
                           },
                         ),
-                        SizedBox(height: 30.h,),
-                        if(registerState.isLoading)
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        if (registerState.isLoading)
                           const CircularProgressIndicator()
                         else
-                          ElevatedButton(
-                              onPressed: (){
-                                if(_formKey.currentState!.validate()){
-                                  ref.read(registerProvider.notifier).register(
-                                      name: _nameController.text,
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                      contactNo: _contactController.text,
-                                      address: _addressController.text
-                                  );
-                                }
-                              },
-                              child: ReusableText(text: 'R E G I S T E R', style: appStyle(12.sp, kPrimary, FontWeight.w600))
+                          CustomButton(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                _register();
+                              }
+                            },
+                            text: 'R E G I S T E R',
                           ),
-                        if(registerState.error != null)
-                          ReusableText(text: registerState.error.toString(), style: appStyle(12.sp, kRed, FontWeight.w400)),
-                        SizedBox(height:20.h),
+                        if (registerState.error != null)
+                          ReusableText(
+                              text: registerState.error.toString(),
+                              style: appStyle(12.sp, kRed, FontWeight.w400)),
+                        SizedBox(height: 20.h),
                         GestureDetector(
                           onTap: () => context.pushReplacementNamed('login'),
-                          child: ReusableText(text: 'Login', style: appStyle(12.sp, kPrimary, FontWeight.w400)),
+                          child: ReusableText(
+                              text: 'Login',
+                              style:
+                                  appStyle(12.sp, kPrimary, FontWeight.w400)),
                         )
-
                       ],
-                    )
-                )
+                    ))
               ],
             ),
           ),
@@ -183,5 +208,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>{
       ),
     );
   }
-}
 
+  void _register() {
+    ref.read(registerProvider.notifier).register(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        contactNo: _contactController.text,
+        address: _addressController.text);
+  }
+}

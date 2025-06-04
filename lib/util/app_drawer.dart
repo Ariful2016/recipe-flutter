@@ -7,6 +7,7 @@ import 'package:recipe_flutter/core/constants/constants.dart';
 import 'package:recipe_flutter/widgets/reusable_text.dart';
 
 import '../viewmodels/auth/login_viewmodel.dart';
+import '../widgets/dialog/custom_alert_dialog.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -17,55 +18,22 @@ class AppDrawer extends ConsumerWidget {
   }
 
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
-    // Show confirmation dialog
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: ReusableText(
-          text: 'Logout',
-          style: appStyle(18.sp, kDark, FontWeight.w600),
-        ),
-        content: ReusableText(
-          text: 'Are you sure you want to logout?',
-          style: appStyle(14.sp, kDark, FontWeight.w400),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: ReusableText(
-              text: 'Cancel',
-              style: appStyle(14.sp, kPrimary, FontWeight.w500),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: ReusableText(
-              text: 'Logout',
-              style: appStyle(14.sp, kPrimary, FontWeight.w500),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (shouldLogout == true) {
-      try {
+    showCustomAlertDialog(
+      context,
+      type: AlertType.custom,
+      icon: Icons.logout,
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      primaryButtonText: 'Yes',
+      secondaryButtonText: 'No',
+      primaryButtonAction: () async {
         final authRepository = ref.read(authRepositoryProvider);
         await authRepository.signOut();
         Navigator.pop(context); // Close the drawer
-        context.go('/login'); // Navigate to login screen
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: ReusableText(
-              text: 'Logout failed: $e',
-              style: appStyle(14.sp, kWhite, FontWeight.w400),
-            ),
-            backgroundColor: kPrimary,
-          ),
-        );
-      }
-    }
+        context.go('/login');
+      },
+      secondaryButtonAction: () => Navigator.of(context).pop(),
+    );
   }
 
   @override

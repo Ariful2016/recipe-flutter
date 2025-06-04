@@ -8,6 +8,9 @@ import 'package:recipe_flutter/viewmodels/auth/login_viewmodel.dart';
 import 'package:recipe_flutter/widgets/edit_text/custom_text_field.dart';
 import 'package:recipe_flutter/widgets/reusable_text.dart';
 
+import '../../widgets/button/custom_button.dart';
+import '../../widgets/dialog/custom_alert_dialog.dart';
+
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -47,6 +50,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             context.goNamed('home');
           }
         });
+      }else if(next.error != null){
+        showCustomAlertDialog(
+          context,
+          type: AlertType.error,
+          title: 'Error',
+          message: next.error.toString(),
+          primaryButtonText: 'Retry',
+          secondaryButtonText: 'Cancel',
+          primaryButtonAction: ()  {
+            _login();
+          },
+          secondaryButtonAction: ()=> Navigator.of(context).pop()
+        );
       }
     });
 
@@ -95,9 +111,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           if (value == null || value.isEmpty) {
                             return passwordEmptyText;
                           }
-                          if (!passwordRegex.hasMatch(value)) {
-                            return passwordNotMatchedText;
-                          }
                           return null;
                         },
                       ),
@@ -105,19 +118,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       if (loginState.isLoading)
                         const CircularProgressIndicator()
                       else
-                        ElevatedButton(
-                          onPressed: () {
+                        CustomButton(
+                          onTap: (){
                             if (_formKey.currentState!.validate()) {
-                              ref.read(loginProvider.notifier).login(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              );
+                              _login();
                             }
                           },
-                          child: ReusableText(
-                            text: 'L O G I N',
-                            style: appStyle(12.sp, kPrimary, FontWeight.w600),
-                          ),
+                          text: 'L O G I N',
                         ),
                       if (loginState.error != null)
                         ReusableText(
@@ -140,6 +147,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _login() {
+    ref.read(loginProvider.notifier).login(
+      email: _emailController.text,
+      password: _passwordController.text,
     );
   }
 
