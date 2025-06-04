@@ -5,17 +5,30 @@ import 'package:go_router/go_router.dart';
 import 'package:recipe_flutter/core/app_style.dart';
 import 'package:recipe_flutter/core/constants/constants.dart';
 import 'package:recipe_flutter/viewmodels/auth/login_viewmodel.dart';
+import 'package:recipe_flutter/widgets/edit_text/custom_text_field.dart';
 import 'package:recipe_flutter/widgets/reusable_text.dart';
 
-class LoginScreen extends ConsumerWidget {
-  LoginScreen({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final loginState = ref.watch(loginProvider);
 
     ref.listen(loginProvider, (previous, next) {
@@ -51,64 +64,77 @@ class LoginScreen extends ConsumerWidget {
                   width: 150.w,
                   height: 150.w,
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
+                SizedBox(height: 20.h),
                 Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(labelText: 'Email'),
-                          validator: (value) =>
-                              value!.isEmpty ? 'Please enter your email' : null,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextFormField(
-                          controller: _passwordController,
-                          decoration:
-                              const InputDecoration(labelText: 'Password'),
-                          validator: (value) => value!.isEmpty
-                              ? 'Please enter your password'
-                              : null,
-                        ),
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        if (loginState.isLoading)
-                          const CircularProgressIndicator()
-                        else
-                          ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  ref.read(loginProvider.notifier).login(
-                                      email: _emailController.text,
-                                      password: _passwordController.text);
-                                }
-                              },
-                              child: ReusableText(
-                                  text: 'L O G I N',
-                                  style: appStyle(
-                                      12.sp, kPrimary, FontWeight.w600))),
-                        if (loginState.error != null)
-                          ReusableText(
-                              text: loginState.error.toString(),
-                              style: appStyle(12.sp, kRed, FontWeight.w400)),
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        GestureDetector(
-                          onTap: () => context.pushReplacementNamed('register'),
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      CustomTextField(
+                        controller: _emailController,
+                        labelText: emailLevelText,
+                        hintText: emailHintText,
+                        icon: Icons.email,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return emailEmptyText;
+                          }
+                          if (!emailRegex.hasMatch(value)) {
+                            return emailNotMatchedText;
+                          }
+                          return null;
+                        },
+                      ),
+                      CustomTextField(
+                        controller: _passwordController,
+                        labelText: passwordLevelText,
+                        hintText: passwordHintText,
+                        icon: Icons.lock,
+                        isPassword: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return passwordEmptyText;
+                          }
+                          if (!passwordRegex.hasMatch(value)) {
+                            return passwordNotMatchedText;
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30.h),
+                      if (loginState.isLoading)
+                        const CircularProgressIndicator()
+                      else
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              ref.read(loginProvider.notifier).login(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              );
+                            }
+                          },
                           child: ReusableText(
-                              text: 'Register',
-                              style:
-                                  appStyle(12.sp, kPrimary, FontWeight.w400)),
-                        )
-                      ],
-                    ))
+                            text: 'L O G I N',
+                            style: appStyle(12.sp, kPrimary, FontWeight.w600),
+                          ),
+                        ),
+                      if (loginState.error != null)
+                        ReusableText(
+                          text: loginState.error.toString(),
+                          style: appStyle(12.sp, kRed, FontWeight.w400),
+                        ),
+                      SizedBox(height: 30.h),
+                      GestureDetector(
+                        onTap: () => context.pushReplacementNamed('register'),
+                        child: ReusableText(
+                          text: 'Register',
+                          style: appStyle(12.sp, kPrimary, FontWeight.w400),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -116,4 +142,5 @@ class LoginScreen extends ConsumerWidget {
       ),
     );
   }
+
 }

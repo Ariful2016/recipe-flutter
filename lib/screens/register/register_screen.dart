@@ -7,8 +7,18 @@ import 'package:recipe_flutter/core/constants/constants.dart';
 import 'package:recipe_flutter/viewmodels/auth/register_viewmodel.dart';
 import 'package:recipe_flutter/widgets/reusable_text.dart';
 
-class RegisterScreen extends ConsumerWidget {
-  RegisterScreen({super.key});
+import '../../util/validation.dart';
+import '../../widgets/edit_text/custom_text_field.dart';
+
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends ConsumerState<RegisterScreen>{
+
 
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
@@ -18,7 +28,17 @@ class RegisterScreen extends ConsumerWidget {
   final _addressController = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _contactController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final registerState = ref.watch(registerProvider);
 
     ref.listen(registerProvider, (previous, next){
@@ -59,39 +79,73 @@ class RegisterScreen extends ConsumerWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(labelText: 'Name'),
-                          validator: (value) =>
-                          value!.isEmpty ? 'Please enter your name' : null,
-                        ),
-                        SizedBox(height: 10.h,),
-                        TextFormField(
+                      CustomTextField(
+                      controller: _nameController,
+                      labelText: nameLevelText,
+                      hintText: nameHintText,
+                      icon: Icons.person,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return nameEmptyText;
+                        }
+                        if (value.length > 100) {
+                          return nameLevelText;
+                        }
+                        return null;
+                      },
+                    ),
+                        CustomTextField(
                           controller: _emailController,
-                          decoration: const InputDecoration(labelText: 'Email'),
-                          validator: (value) =>
-                          value!.isEmpty ? 'Please enter your email' : null,
+                          labelText: emailLevelText,
+                          hintText: emailHintText,
+                          icon: Icons.email,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return emailEmptyText;
+                            }
+                            if (!emailRegex.hasMatch(value)) {
+                              return emailNotMatchedText;
+                            }
+                            return null;
+                          },
                         ),
-                        TextFormField(
+                        CustomTextField(
                           controller: _passwordController,
-                          decoration: const InputDecoration(labelText: 'Password'),
-                          validator: (value) =>
-                          value!.isEmpty ? 'Please enter your password' : null,
+                          labelText: passwordLevelText,
+                          hintText: passwordHintText,
+                          icon: Icons.lock,
+                          isPassword: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return passwordEmptyText;
+                            }
+                            if (!passwordRegex.hasMatch(value)) {
+                              return passwordNotMatchedText;
+                            }
+                            return null;
+                          },
                         ),
-                        SizedBox(height: 10.h,),
-                        SizedBox(height: 10.h,),
-                        TextFormField(
+                        CustomTextField(
                           controller: _contactController,
-                          decoration: const InputDecoration(labelText: 'Contact No'),
-                          validator: (value) =>
-                          value!.isEmpty ? 'Please enter your contact No' : null,
+                          labelText: contactLevelText,
+                          hintText: contactHintText,
+                          icon: Icons.phone,
+                          keyboardType: TextInputType.number,
+                          validator: (value) => validateContactNo(value)
                         ),
-                        SizedBox(height: 10.h,),
-                        TextFormField(
+                        CustomTextField(
                           controller: _addressController,
-                          decoration: const InputDecoration(labelText: 'Address'),
-                          validator: (value) =>
-                          value!.isEmpty ? 'Please enter your address' : null,
+                          labelText: addressLevelText,
+                          hintText: addressHintText,
+                          icon: Icons.location_on,
+                          maxLines: 3,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return addressEmptyText;
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 30.h,),
                         if(registerState.isLoading)
@@ -130,3 +184,4 @@ class RegisterScreen extends ConsumerWidget {
     );
   }
 }
+

@@ -32,3 +32,37 @@ String deviceInfo = "";
 String secureId = "";
 
 String url = 'https://www.shakti.org.bd/';
+final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+final passwordRegex = RegExp(
+  r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$',
+);
+
+
+//name input text
+final nameLevelText = 'Name';
+final nameHintText = 'Enter your name';
+final nameEmptyText = 'Please enter your name';
+final nameLimitText = 'Please enter your name within 100 characters';
+
+//email input text
+final emailLevelText = 'Email';
+final emailHintText = 'Enter your email';
+final emailEmptyText = 'Please enter your email';
+final emailNotMatchedText = 'Please enter a valid email';
+
+//password input text
+final passwordLevelText = 'Password';
+final passwordHintText = 'Enter your password';
+final passwordEmptyText = 'Please enter your password';
+final passwordNotMatchedText = 'Password must be at least 6 characters, with one uppercase, one lowercase, one digit, and one special character';
+
+//contact input text
+final contactLevelText = 'Contact No';
+final contactHintText = 'Enter your contact No';
+final contactEmptyText = 'Please enter your contact No';
+final contactNotMatchedText = 'Please enter a valid contact No';
+
+//address input text
+final addressLevelText = 'Address';
+final addressHintText = 'Enter your address';
+final addressEmptyText = 'Please enter your address';

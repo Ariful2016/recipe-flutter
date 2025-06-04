@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../core/app_style.dart';
 import '../../core/constants/constants.dart';
 import '../../viewmodels/auth/register_viewmodel.dart';
@@ -37,8 +36,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     try {
       _authSubscription = ref.listenManual<AsyncValue<User?>>(
-        authStateProvider,
-        (previous, next) async {
+        authStateProvider, (previous, next) async {
           if (!next.isLoading) {
             final user = next.value;
             try {
