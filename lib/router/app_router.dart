@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:recipe_flutter/screens/cart/cart_screen.dart';
 import 'package:recipe_flutter/screens/favorite/favorite_screen.dart';
@@ -11,23 +14,23 @@ import 'package:recipe_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:recipe_flutter/screens/order/order_screen.dart';
 import 'package:recipe_flutter/screens/profile/profile_screen.dart';
 import 'package:recipe_flutter/screens/register/register_screen.dart';
+import 'package:recipe_flutter/screens/splash/splash_screen.dart';
 import '../screens/card_swipe/tinder_swipe_screen.dart';
-import '../screens/splash/splash_screen.dart';
-
+import '../viewmodels/auth/register_viewmodel.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     routes: [
       GoRoute(
-        path: '/',
+        path: '/splash',
         name: 'splash',
-        builder: (context, state) => SplashScreen(),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: '/onboarding',
         name: 'onboarding',
-        builder: (context, state) => OnboardingScreen(),
+        builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
         path: '/login',
@@ -52,44 +55,73 @@ class AppRouter {
       GoRoute(
         path: '/food',
         name: 'food',
-        builder: (context, state) => FoodScreen(),
+        builder: (context, state) => const FoodScreen(),
       ),
       GoRoute(
         path: '/favorite',
         name: 'favorite',
-        builder: (context, state) => FavoriteScreen(),
+        builder: (context, state) => const FavoriteScreen(),
       ),
       GoRoute(
         path: '/joke',
         name: 'joke',
-        builder: (context, state) => FoodJokeScreen(),
+        builder: (context, state) => const FoodJokeScreen(),
       ),
       GoRoute(
         path: '/profile',
         name: 'profile',
-        builder: (context, state) => ProfileScreen(),
+        builder: (context, state) => const ProfileScreen(),
       ),
       GoRoute(
         path: '/order',
         name: 'order',
-        builder: (context, state) => OrderScreen(),
+        builder: (context, state) => const OrderScreen(),
       ),
       GoRoute(
         path: '/cart',
         name: 'cart',
-        builder: (context, state) => CartScreen(),
+        builder: (context, state) => const CartScreen(),
       ),
       GoRoute(
         path: '/history',
         name: 'history',
-        builder: (context, state) => OrderHistory(),
+        builder: (context, state) => const OrderHistory(),
       ),
       GoRoute(
         path: '/logout',
         name: 'logout',
-        builder: (context, state) => LogoutScreen(),
+        builder: (context, state) => const LogoutScreen(),
       ),
-      // Add more routes here...
     ],
   );
+
+  /*static Future<String?> _authRedirect(BuildContext context, GoRouterState state) async {
+    final container = ProviderContainer();
+    try {
+      final authState = container.read(authStateProvider);
+      if (authState.isLoading) {
+        await Future.delayed(const Duration(milliseconds: 500)); // Wait briefly for auth state
+        final updatedUser = container.read(authStateProvider).value;
+        if (updatedUser == null) {
+          return '/login';
+        }
+      } else if (authState.value == null) {
+        return '/login';
+      }
+      return null;
+    } catch (e) {
+      return '/login';
+    } finally {
+      container.dispose();
+    }
+  }*/
+  static String? _authRedirect(BuildContext context, GoRouterState state) {
+    final user = FirebaseAuth.instance.currentUser;
+    final isLoggingIn = state.matchedLocation == '/login' || state.matchedLocation == '/register';
+
+    if (user == null && !isLoggingIn) return '/login';
+    if (user != null && isLoggingIn) return '/home';
+    return null;
+  }
+
 }

@@ -27,6 +27,8 @@ dependencies:
   firebase_database:
   cloud_firestore:
   firebase_crashlytics:
+  flutter_riverpod:
+  dio:
 
 dev_dependencies:
   flutter_test:

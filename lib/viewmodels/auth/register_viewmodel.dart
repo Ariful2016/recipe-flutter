@@ -40,7 +40,13 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
         address: address,
         photoUrl: photoUrl,
       );
-      await _repository.registerUser(user, password);
+      await _repository.registerUser(name: name,
+        email: email,
+        password: password,
+        contactNo: contactNo,
+        address: address,
+        photoUrl: photoUrl,
+      );
       state = state.copyWith(isLoading: false, isSuccess: true);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());

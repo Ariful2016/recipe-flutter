@@ -20,91 +20,111 @@ class RegisterScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final registerState = ref.watch(registerProvider);
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/image-1.png',
-              width: 150.w,
-              height: 150.w,
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Name'),
-                      validator: (value) =>
-                      value!.isEmpty ? 'Please enter your name' : null,
-                    ),
-                    SizedBox(height: 10.h,),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      validator: (value) =>
-                      value!.isEmpty ? 'Please enter your email' : null,
-                    ),
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      validator: (value) =>
-                      value!.isEmpty ? 'Please enter your password' : null,
-                    ),
-                    SizedBox(height: 10.h,),
-                    SizedBox(height: 10.h,),
-                    TextFormField(
-                      controller: _contactController,
-                      decoration: const InputDecoration(labelText: 'Contact No'),
-                      validator: (value) =>
-                      value!.isEmpty ? 'Please enter your contact No' : null,
-                    ),
-                    SizedBox(height: 10.h,),
-                    TextFormField(
-                      controller: _addressController,
-                      decoration: const InputDecoration(labelText: 'Address'),
-                      validator: (value) =>
-                      value!.isEmpty ? 'Please enter your address' : null,
-                    ),
-                    SizedBox(height: 30.h,),
-                    if(registerState.isLoading)
-                      const CircularProgressIndicator()
-                    else
-                      ElevatedButton(
-                          onPressed: (){
-                            if(_formKey.currentState!.validate()){
-                              ref.read(registerProvider.notifier).register(
-                                  name: _nameController.text,
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                  contactNo: _contactController.text,
-                                  address: _addressController.text
-                              );
-                            }
-                          },
-                          child: ReusableText(text: 'R E G I S T E R', style: appStyle(12.sp, kWhite, FontWeight.w600))
-                      ),
-                    if(registerState.error != null)
-                      ReusableText(text: registerState.error.toString(), style: appStyle(12.sp, kRed, FontWeight.w400)),
-                    if(registerState.isSuccess)
-                      ReusableText(text: 'Registration Successful', style: appStyle(12.sp, kPrimary, FontWeight.w400)),
 
-                    SizedBox(height:20.h),
-                    GestureDetector(
-                      onTap: () => context.pushReplacementNamed('login'),
-                      child: ReusableText(text: 'Login', style: appStyle(12.sp, kPrimary, FontWeight.w400)),
+    ref.listen(registerProvider, (previous, next){
+      if(next.isSuccess && previous?.isSuccess != true){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: ReusableText(text: 'Registration Successful', style: appStyle(12.sp, kWhite, FontWeight.w400)),
+            backgroundColor: kPrimary,
+            duration: const Duration(seconds: 2)
+          ),
+        );
+        Future.delayed(const Duration(seconds: 2), (){
+          if(context.mounted){
+            context.goNamed('login');
+          }
+        });
+      }
+    });
+
+    return Scaffold(
+      backgroundColor: kOffWhite,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/image-1.png',
+                  width: 150.w,
+                  height: 150.w,
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(labelText: 'Name'),
+                          validator: (value) =>
+                          value!.isEmpty ? 'Please enter your name' : null,
+                        ),
+                        SizedBox(height: 10.h,),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(labelText: 'Email'),
+                          validator: (value) =>
+                          value!.isEmpty ? 'Please enter your email' : null,
+                        ),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(labelText: 'Password'),
+                          validator: (value) =>
+                          value!.isEmpty ? 'Please enter your password' : null,
+                        ),
+                        SizedBox(height: 10.h,),
+                        SizedBox(height: 10.h,),
+                        TextFormField(
+                          controller: _contactController,
+                          decoration: const InputDecoration(labelText: 'Contact No'),
+                          validator: (value) =>
+                          value!.isEmpty ? 'Please enter your contact No' : null,
+                        ),
+                        SizedBox(height: 10.h,),
+                        TextFormField(
+                          controller: _addressController,
+                          decoration: const InputDecoration(labelText: 'Address'),
+                          validator: (value) =>
+                          value!.isEmpty ? 'Please enter your address' : null,
+                        ),
+                        SizedBox(height: 30.h,),
+                        if(registerState.isLoading)
+                          const CircularProgressIndicator()
+                        else
+                          ElevatedButton(
+                              onPressed: (){
+                                if(_formKey.currentState!.validate()){
+                                  ref.read(registerProvider.notifier).register(
+                                      name: _nameController.text,
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
+                                      contactNo: _contactController.text,
+                                      address: _addressController.text
+                                  );
+                                }
+                              },
+                              child: ReusableText(text: 'R E G I S T E R', style: appStyle(12.sp, kPrimary, FontWeight.w600))
+                          ),
+                        if(registerState.error != null)
+                          ReusableText(text: registerState.error.toString(), style: appStyle(12.sp, kRed, FontWeight.w400)),
+                        SizedBox(height:20.h),
+                        GestureDetector(
+                          onTap: () => context.pushReplacementNamed('login'),
+                          child: ReusableText(text: 'Login', style: appStyle(12.sp, kPrimary, FontWeight.w400)),
+                        )
+
+                      ],
                     )
-
-                  ],
                 )
-            )
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -12,11 +12,27 @@ class AuthRepository {
   })  : _auth = auth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance;
 
-  Future<UserCredential> registerUser(AppUser user, String password) async {
+  Future<UserCredential> registerUser({
+    required String name,
+    required String email,
+    required String password,
+    required String contactNo,
+    required String address,
+    String? photoUrl,
+  }) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
-              email: user.email, password: password);
+              email: email, password: password);
+
+      AppUser user = AppUser(
+        uid: userCredential.user!.uid, // Set uid from Firebase
+        name: name,
+        email: email,
+        contactNo: contactNo,
+        address: address,
+        photoUrl: photoUrl,
+      );
 
       await _firestore
           .collection('users')
