@@ -2,8 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:recipe_flutter/data/models/users/register_state.dart';
 import '../../data/repositories/auth/auth_repository.dart';
 
-final authRepositoryProvider =
-Provider<AuthRepository>((ref) => AuthRepository());
+
 
 class LoginViewModel extends StateNotifier<RegisterState> {
   final AuthRepository _repository;
@@ -27,7 +26,4 @@ class LoginViewModel extends StateNotifier<RegisterState> {
   }
 }
 
-final loginProvider = StateNotifierProvider<LoginViewModel, RegisterState>((ref){
-  final repository = ref.watch(authRepositoryProvider);
-  return LoginViewModel(repository);
-});
+

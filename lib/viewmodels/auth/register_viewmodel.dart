@@ -4,18 +4,7 @@ import 'package:recipe_flutter/data/models/users/app_user.dart';
 import 'package:recipe_flutter/data/models/users/register_state.dart';
 import 'package:recipe_flutter/data/repositories/auth/auth_repository.dart';
 
-final authRepositoryProvider =
-    Provider<AuthRepository>((ref) => AuthRepository());
 
-final authStateProvider = StreamProvider<User?>((ref) {
-  return ref.watch(authRepositoryProvider).authStateChange;
-});
-
-final userDataProvider =
-    FutureProvider.family<AppUser?, String>((ref, uid) async {
-  final repository = ref.watch(authRepositoryProvider);
-  return await repository.getUserData(uid);
-});
 
 class RegisterViewModel extends StateNotifier<RegisterState> {
   final AuthRepository _repository;
@@ -54,8 +43,4 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   }
 }
 
-final registerProvider =
-    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return RegisterViewModel(repository);
-});
+

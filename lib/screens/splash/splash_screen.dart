@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/app_style.dart';
 import '../../core/constants/constants.dart';
-import '../../viewmodels/auth/register_viewmodel.dart';
+import '../../di/auth/auth_provider.dart';
 import '../../widgets/reusable_text.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {

@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:recipe_flutter/core/app_style.dart';
 import 'package:recipe_flutter/core/constants/constants.dart';
 import 'package:recipe_flutter/widgets/reusable_text.dart';
-
-import '../viewmodels/auth/login_viewmodel.dart';
+import '../di/auth/auth_provider.dart';
 import '../widgets/dialog/custom_alert_dialog.dart';
 
 class AppDrawer extends ConsumerWidget {
