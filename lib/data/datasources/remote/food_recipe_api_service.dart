@@ -9,6 +9,7 @@ class FoodRecipeApiService {
 
   FoodRecipeApiService({Dio? dio}) : _dio = dio ?? Dio() {
     _dio.options.baseUrl = baseUrl;
+    _dio.options.connectTimeout = Duration(seconds: 30);
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler){
         options.queryParameters['apiKey'] = apiKey;
