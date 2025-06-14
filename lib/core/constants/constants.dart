@@ -22,7 +22,8 @@ const kOffWhite = Color(0xffF3F4F8);
 double height = 805.33.h;
 double width = 384.w;
 
-String baseUrl = "";
+final String baseUrl = "https://api.spoonacular.com";
+final String apiKey = "245be2a9286344a7a11da5277ccb70a3";
 String baseUrlWeb = "";
 String versionName = "";
 String authorization = "";
@@ -30,6 +31,7 @@ String bearer = "Bearer";
 String? ipAddress = "";
 String deviceInfo = "";
 String secureId = "";
+
 
 String url = 'https://www.shakti.org.bd/';
 final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
