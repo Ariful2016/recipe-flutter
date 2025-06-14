@@ -18,18 +18,23 @@ class Welcome {
   });
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-    results: json["results"] == null ? [] : List<Result>.from(json["results"]!.map((x) => Result.fromJson(x))),
-    offset: json["offset"],
-    number: json["number"],
-    totalResults: json["totalResults"],
-  );
+        results: json["results"] == null
+            ? []
+            : List<Result>.from(
+                json["results"]!.map((x) => Result.fromJson(x))),
+        offset: json["offset"],
+        number: json["number"],
+        totalResults: json["totalResults"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toJson())),
-    "offset": offset,
-    "number": number,
-    "totalResults": totalResults,
-  };
+        "results": results == null
+            ? []
+            : List<dynamic>.from(results!.map((x) => x.toJson())),
+        "offset": offset,
+        "number": number,
+        "totalResults": totalResults,
+      };
 }
 
 class Result {
@@ -118,90 +123,121 @@ class Result {
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-    id: json["id"],
-    image: json["image"],
-    imageType: json["imageType"],
-    title: json["title"],
-    readyInMinutes: json["readyInMinutes"],
-    servings: json["servings"],
-    sourceUrl: json["sourceUrl"],
-    vegetarian: json["vegetarian"],
-    vegan: json["vegan"],
-    glutenFree: json["glutenFree"],
-    dairyFree: json["dairyFree"],
-    veryHealthy: json["veryHealthy"],
-    cheap: json["cheap"],
-    veryPopular: json["veryPopular"],
-    sustainable: json["sustainable"],
-    lowFodmap: json["lowFodmap"],
-    weightWatcherSmartPoints: json["weightWatcherSmartPoints"],
-    gaps: json["gaps"],
-    preparationMinutes: json["preparationMinutes"],
-    cookingMinutes: json["cookingMinutes"],
-    aggregateLikes: json["aggregateLikes"],
-    healthScore: json["healthScore"],
-    creditsText: json["creditsText"],
-    license: json["license"],
-    sourceName: json["sourceName"],
-    pricePerServing: json["pricePerServing"]?.toDouble(),
-    extendedIngredients: json["extendedIngredients"] == null ? [] : List<EdIngredient>.from(json["extendedIngredients"]!.map((x) => EdIngredient.fromJson(x))),
-    summary: json["summary"],
-    cuisines: json["cuisines"] == null ? [] : List<dynamic>.from(json["cuisines"]!.map((x) => x)),
-    dishTypes: json["dishTypes"] == null ? [] : List<String>.from(json["dishTypes"]!.map((x) => x)),
-    diets: json["diets"] == null ? [] : List<String>.from(json["diets"]!.map((x) => x)),
-    occasions: json["occasions"] == null ? [] : List<String>.from(json["occasions"]!.map((x) => x)),
-    spoonacularScore: json["spoonacularScore"]?.toDouble(),
-    spoonacularSourceUrl: json["spoonacularSourceUrl"],
-    usedIngredientCount: json["usedIngredientCount"],
-    missedIngredientCount: json["missedIngredientCount"],
-    missedIngredients: json["missedIngredients"] == null ? [] : List<EdIngredient>.from(json["missedIngredients"]!.map((x) => EdIngredient.fromJson(x))),
-    likes: json["likes"],
-    usedIngredients: json["usedIngredients"] == null ? [] : List<dynamic>.from(json["usedIngredients"]!.map((x) => x)),
-    unusedIngredients: json["unusedIngredients"] == null ? [] : List<dynamic>.from(json["unusedIngredients"]!.map((x) => x)),
-  );
+        id: json["id"],
+        image: json["image"],
+        imageType: json["imageType"],
+        title: json["title"],
+        readyInMinutes: json["readyInMinutes"],
+        servings: json["servings"],
+        sourceUrl: json["sourceUrl"],
+        vegetarian: json["vegetarian"],
+        vegan: json["vegan"],
+        glutenFree: json["glutenFree"],
+        dairyFree: json["dairyFree"],
+        veryHealthy: json["veryHealthy"],
+        cheap: json["cheap"],
+        veryPopular: json["veryPopular"],
+        sustainable: json["sustainable"],
+        lowFodmap: json["lowFodmap"],
+        weightWatcherSmartPoints: json["weightWatcherSmartPoints"],
+        gaps: json["gaps"],
+        preparationMinutes: json["preparationMinutes"],
+        cookingMinutes: json["cookingMinutes"],
+        aggregateLikes: json["aggregateLikes"],
+        healthScore: json["healthScore"],
+        creditsText: json["creditsText"],
+        license: json["license"],
+        sourceName: json["sourceName"],
+        pricePerServing: json["pricePerServing"]?.toDouble(),
+        extendedIngredients: json["extendedIngredients"] == null
+            ? []
+            : List<EdIngredient>.from(json["extendedIngredients"]!
+                .map((x) => EdIngredient.fromJson(x))),
+        summary: json["summary"],
+        cuisines: json["cuisines"] == null
+            ? []
+            : List<dynamic>.from(json["cuisines"]!.map((x) => x)),
+        dishTypes: json["dishTypes"] == null
+            ? []
+            : List<String>.from(json["dishTypes"]!.map((x) => x)),
+        diets: json["diets"] == null
+            ? []
+            : List<String>.from(json["diets"]!.map((x) => x)),
+        occasions: json["occasions"] == null
+            ? []
+            : List<String>.from(json["occasions"]!.map((x) => x)),
+        spoonacularScore: json["spoonacularScore"]?.toDouble(),
+        spoonacularSourceUrl: json["spoonacularSourceUrl"],
+        usedIngredientCount: json["usedIngredientCount"],
+        missedIngredientCount: json["missedIngredientCount"],
+        missedIngredients: json["missedIngredients"] == null
+            ? []
+            : List<EdIngredient>.from(json["missedIngredients"]!
+                .map((x) => EdIngredient.fromJson(x))),
+        likes: json["likes"],
+        usedIngredients: json["usedIngredients"] == null
+            ? []
+            : List<dynamic>.from(json["usedIngredients"]!.map((x) => x)),
+        unusedIngredients: json["unusedIngredients"] == null
+            ? []
+            : List<dynamic>.from(json["unusedIngredients"]!.map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "image": image,
-    "imageType": imageType,
-    "title": title,
-    "readyInMinutes": readyInMinutes,
-    "servings": servings,
-    "sourceUrl": sourceUrl,
-    "vegetarian": vegetarian,
-    "vegan": vegan,
-    "glutenFree": glutenFree,
-    "dairyFree": dairyFree,
-    "veryHealthy": veryHealthy,
-    "cheap": cheap,
-    "veryPopular": veryPopular,
-    "sustainable": sustainable,
-    "lowFodmap": lowFodmap,
-    "weightWatcherSmartPoints": weightWatcherSmartPoints,
-    "gaps": gaps,
-    "preparationMinutes": preparationMinutes,
-    "cookingMinutes": cookingMinutes,
-    "aggregateLikes": aggregateLikes,
-    "healthScore": healthScore,
-    "creditsText": creditsText,
-    "license": license,
-    "sourceName": sourceName,
-    "pricePerServing": pricePerServing,
-    "extendedIngredients": extendedIngredients == null ? [] : List<dynamic>.from(extendedIngredients!.map((x) => x.toJson())),
-    "summary": summary,
-    "cuisines": cuisines == null ? [] : List<dynamic>.from(cuisines!.map((x) => x)),
-    "dishTypes": dishTypes == null ? [] : List<dynamic>.from(dishTypes!.map((x) => x)),
-    "diets": diets == null ? [] : List<dynamic>.from(diets!.map((x) => x)),
-    "occasions": occasions == null ? [] : List<dynamic>.from(occasions!.map((x) => x)),
-    "spoonacularScore": spoonacularScore,
-    "spoonacularSourceUrl": spoonacularSourceUrl,
-    "usedIngredientCount": usedIngredientCount,
-    "missedIngredientCount": missedIngredientCount,
-    "missedIngredients": missedIngredients == null ? [] : List<dynamic>.from(missedIngredients!.map((x) => x.toJson())),
-    "likes": likes,
-    "usedIngredients": usedIngredients == null ? [] : List<dynamic>.from(usedIngredients!.map((x) => x)),
-    "unusedIngredients": unusedIngredients == null ? [] : List<dynamic>.from(unusedIngredients!.map((x) => x)),
-  };
+        "id": id,
+        "image": image,
+        "imageType": imageType,
+        "title": title,
+        "readyInMinutes": readyInMinutes,
+        "servings": servings,
+        "sourceUrl": sourceUrl,
+        "vegetarian": vegetarian,
+        "vegan": vegan,
+        "glutenFree": glutenFree,
+        "dairyFree": dairyFree,
+        "veryHealthy": veryHealthy,
+        "cheap": cheap,
+        "veryPopular": veryPopular,
+        "sustainable": sustainable,
+        "lowFodmap": lowFodmap,
+        "weightWatcherSmartPoints": weightWatcherSmartPoints,
+        "gaps": gaps,
+        "preparationMinutes": preparationMinutes,
+        "cookingMinutes": cookingMinutes,
+        "aggregateLikes": aggregateLikes,
+        "healthScore": healthScore,
+        "creditsText": creditsText,
+        "license": license,
+        "sourceName": sourceName,
+        "pricePerServing": pricePerServing,
+        "extendedIngredients": extendedIngredients == null
+            ? []
+            : List<dynamic>.from(extendedIngredients!.map((x) => x.toJson())),
+        "summary": summary,
+        "cuisines":
+            cuisines == null ? [] : List<dynamic>.from(cuisines!.map((x) => x)),
+        "dishTypes": dishTypes == null
+            ? []
+            : List<dynamic>.from(dishTypes!.map((x) => x)),
+        "diets": diets == null ? [] : List<dynamic>.from(diets!.map((x) => x)),
+        "occasions": occasions == null
+            ? []
+            : List<dynamic>.from(occasions!.map((x) => x)),
+        "spoonacularScore": spoonacularScore,
+        "spoonacularSourceUrl": spoonacularSourceUrl,
+        "usedIngredientCount": usedIngredientCount,
+        "missedIngredientCount": missedIngredientCount,
+        "missedIngredients": missedIngredients == null
+            ? []
+            : List<dynamic>.from(missedIngredients!.map((x) => x.toJson())),
+        "likes": likes,
+        "usedIngredients": usedIngredients == null
+            ? []
+            : List<dynamic>.from(usedIngredients!.map((x) => x)),
+        "unusedIngredients": unusedIngredients == null
+            ? []
+            : List<dynamic>.from(unusedIngredients!.map((x) => x)),
+      };
 }
 
 class EdIngredient {
@@ -240,51 +276,50 @@ class EdIngredient {
   });
 
   factory EdIngredient.fromJson(Map<String, dynamic> json) => EdIngredient(
-    id: json["id"],
-    aisle: json["aisle"],
-    image: json["image"],
-    consistency: consistencyValues.map[json["consistency"]]!,
-    name: json["name"],
-    nameClean: json["nameClean"],
-    original: json["original"],
-    originalName: json["originalName"],
-    amount: json["amount"]?.toDouble(),
-    unit: json["unit"],
-    meta: json["meta"] == null ? [] : List<String>.from(json["meta"]!.map((x) => x)),
-    measures: json["measures"] == null ? null : Measures.fromJson(json["measures"]),
-    unitLong: json["unitLong"],
-    unitShort: json["unitShort"],
-    extendedName: json["extendedName"],
-  );
+        id: json["id"],
+        aisle: json["aisle"],
+        image: json["image"],
+        consistency: consistencyValues.map[json["consistency"]]!,
+        name: json["name"],
+        nameClean: json["nameClean"],
+        original: json["original"],
+        originalName: json["originalName"],
+        amount: json["amount"]?.toDouble(),
+        unit: json["unit"],
+        meta: json["meta"] == null
+            ? []
+            : List<String>.from(json["meta"]!.map((x) => x)),
+        measures: json["measures"] == null
+            ? null
+            : Measures.fromJson(json["measures"]),
+        unitLong: json["unitLong"],
+        unitShort: json["unitShort"],
+        extendedName: json["extendedName"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "aisle": aisle,
-    "image": image,
-    "consistency": consistencyValues.reverse[consistency],
-    "name": name,
-    "nameClean": nameClean,
-    "original": original,
-    "originalName": originalName,
-    "amount": amount,
-    "unit": unit,
-    "meta": meta == null ? [] : List<dynamic>.from(meta!.map((x) => x)),
-    "measures": measures?.toJson(),
-    "unitLong": unitLong,
-    "unitShort": unitShort,
-    "extendedName": extendedName,
-  };
+        "id": id,
+        "aisle": aisle,
+        "image": image,
+        "consistency": consistencyValues.reverse[consistency],
+        "name": name,
+        "nameClean": nameClean,
+        "original": original,
+        "originalName": originalName,
+        "amount": amount,
+        "unit": unit,
+        "meta": meta == null ? [] : List<dynamic>.from(meta!.map((x) => x)),
+        "measures": measures?.toJson(),
+        "unitLong": unitLong,
+        "unitShort": unitShort,
+        "extendedName": extendedName,
+      };
 }
 
-enum Consistency {
-  LIQUID,
-  SOLID
-}
+enum Consistency { LIQUID, SOLID }
 
-final consistencyValues = EnumValues({
-  "LIQUID": Consistency.LIQUID,
-  "SOLID": Consistency.SOLID
-});
+final consistencyValues =
+    EnumValues({"LIQUID": Consistency.LIQUID, "SOLID": Consistency.SOLID});
 
 class Measures {
   Metric? us;
@@ -296,14 +331,14 @@ class Measures {
   });
 
   factory Measures.fromJson(Map<String, dynamic> json) => Measures(
-    us: json["us"] == null ? null : Metric.fromJson(json["us"]),
-    metric: json["metric"] == null ? null : Metric.fromJson(json["metric"]),
-  );
+        us: json["us"] == null ? null : Metric.fromJson(json["us"]),
+        metric: json["metric"] == null ? null : Metric.fromJson(json["metric"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "us": us?.toJson(),
-    "metric": metric?.toJson(),
-  };
+        "us": us?.toJson(),
+        "metric": metric?.toJson(),
+      };
 }
 
 class Metric {
@@ -318,16 +353,16 @@ class Metric {
   });
 
   factory Metric.fromJson(Map<String, dynamic> json) => Metric(
-    amount: json["amount"]?.toDouble(),
-    unitShort: json["unitShort"],
-    unitLong: json["unitLong"],
-  );
+        amount: json["amount"]?.toDouble(),
+        unitShort: json["unitShort"],
+        unitLong: json["unitLong"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "amount": amount,
-    "unitShort": unitShort,
-    "unitLong": unitLong,
-  };
+        "amount": amount,
+        "unitShort": unitShort,
+        "unitLong": unitLong,
+      };
 }
 
 class EnumValues<T> {
