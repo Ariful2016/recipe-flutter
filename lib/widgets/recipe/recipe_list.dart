@@ -131,8 +131,7 @@ Widget recipeList(FoodRecipesState state) {
                           ),
                           SizedBox(width: 4.w),
                           ReusableText(
-                            text:
-                            '${recipe.spoonacularScore?.toStringAsFixed(1) ?? 'N/A'}',
+                            text: recipe.spoonacularScore?.toStringAsFixed(1) ?? 'N/A',
                             style: appStyle(12.sp, kDark, FontWeight.w500),
                           ),
                         ],
