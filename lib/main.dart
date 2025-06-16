@@ -8,6 +8,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe_flutter/router/app_router.dart';
+import 'core/constants/constants.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -17,16 +18,14 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    // Initialize Analytics
     await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   } catch (e, stack) {
-    FirebaseCrashlytics.instance
+    await FirebaseCrashlytics.instance
         .recordError(e, stack, reason: 'Firebase initialization failed');
-    // Optionally show an error screen or fallback
   }
 
   // Configure Crashlytics
-  const bool fatalError = kDebugMode; // Fatal errors only in debug mode
+  const bool fatalError = kDebugMode;
   FlutterError.onError = (errorDetails) {
     if (fatalError) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -42,6 +41,10 @@ Future<void> main() async {
     }
     return true;
   };
+
+  // Remove splash screen after initialization
+  FlutterNativeSplash.remove();
+
   runApp(const ProviderScope(child: MainApp()));
 }
 
@@ -58,6 +61,13 @@ class MainApp extends StatelessWidget {
         return MaterialApp.router(
           title: 'Recipe',
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: kPrimary,
+            scaffoldBackgroundColor: kOffWhite,
+            textTheme: TextTheme(
+              bodyMedium: TextStyle(fontSize: 14.sp, color: kDark),
+            ),
+          ),
           routerConfig: AppRouter.router,
         );
       },
