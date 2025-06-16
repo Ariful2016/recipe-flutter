@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:recipe_flutter/screens/cart/cart_screen.dart';
 import 'package:recipe_flutter/screens/favorite/favorite_screen.dart';
@@ -12,11 +14,36 @@ import 'package:recipe_flutter/screens/profile/profile_screen.dart';
 import 'package:recipe_flutter/screens/register/register_screen.dart';
 import 'package:recipe_flutter/screens/splash/splash_screen.dart';
 import '../screens/card_swipe/tinder_swipe_screen.dart';
-import '../viewmodels/auth/register_viewmodel.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
+    redirect: (BuildContext context, GoRouterState state) async {
+      // Prevent empty location
+      if (state.fullPath == null || state.fullPath!.isEmpty) {
+        await FirebaseAnalytics.instance.logEvent(
+          name: 'invalid_route',
+          parameters: {'attempted_path': state.fullPath ?? 'empty'},
+        );
+        return '/splash';
+      }
+      return null; // Proceed with the requested route
+    },
+    errorBuilder: (context, state) {
+      // Handle invalid routes
+      FirebaseAnalytics.instance.logEvent(
+        name: 'route_error',
+        parameters: {'error': state.error.toString(), 'path': state.fullPath ?? 'unknown'},
+      );
+      return Scaffold(
+        body: Center(
+          child: Text(
+            'Route not found: ${state.fullPath}\nError: ${state.error}',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    },
     routes: [
       GoRoute(
         path: '/splash',
@@ -31,12 +58,12 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => LoginScreen(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/register',
         name: 'register',
-        builder: (context, state) => RegisterScreen(),
+        builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
         path: '/tinderSwipe',
@@ -84,6 +111,6 @@ class AppRouter {
         builder: (context, state) => const OrderHistory(),
       ),
     ],
+    debugLogDiagnostics: true, // Enable for debugging
   );
-
 }
