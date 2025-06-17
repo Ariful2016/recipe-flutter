@@ -27,6 +27,8 @@ dependencies:
   firebase_database:
   cloud_firestore:
   firebase_crashlytics:
+  firebase_messaging:
+  flutter_local_notifications:
   flutter_riverpod:
   dio:
 
