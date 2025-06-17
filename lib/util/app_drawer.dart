@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,7 @@ import '../widgets/dialog/custom_alert_dialog.dart';
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
-  void _navigate(BuildContext context, String route){
+  void _navigate(BuildContext context, String route) {
     Navigator.pop(context);
     context.go(route);
   }
@@ -28,7 +29,7 @@ class AppDrawer extends ConsumerWidget {
       primaryButtonAction: () async {
         final authRepository = ref.read(authRepositoryProvider);
         await authRepository.signOut();
-        Navigator.pop(context); // Close the drawer
+        Navigator.pop(context); // Close the dialog
         context.go('/login');
       },
       secondaryButtonAction: () => Navigator.of(context).pop(),
@@ -36,66 +37,128 @@ class AppDrawer extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
+      backgroundColor: Colors.transparent, // Transparent for glass effect
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20.r),
+          bottomRight: Radius.circular(20.r),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), // Frosted glass blur
+          child: Container(
             decoration: BoxDecoration(
-              color: kPrimary
-            ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 30.r,
-                    backgroundColor: kWhite,
-                    child: Icon(Icons.person, size: 30.sp, color: kPrimary,),
-                  ),
-                  SizedBox(height: 10.h,),
-                  ReusableText(text: 'Foody', style: appStyle(24.sp, kWhite, FontWeight.w500))
+              color: Colors.white.withValues(alpha: 0.1), // Semi-transparent white
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withValues(alpha: 0.2),
+                  Colors.white.withValues(alpha: 0.05),
                 ],
-              )
-          ),
-          ListTile(
-            leading: Icon(Icons.person, color: kPrimary, size: 24.sp,),
-            title: ReusableText(text: 'Profile', style: appStyle(14.sp, kDark, FontWeight.w500)),
-            onTap: () => _navigate(context, '/profile'),
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_bag, color: kPrimary, size: 24.sp),
-            title: ReusableText(
-              text: 'Order',
-              style: appStyle(14.sp, kDark, FontWeight.w500),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1.w),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20.r),
+                bottomRight: Radius.circular(20.r),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10.r,
+                  offset: Offset(0, 5.h),
+                ),
+              ],
             ),
-            onTap: () => _navigate(context, '/order'),
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart, color: kPrimary, size: 24.sp),
-            title: ReusableText(
-              text: 'Cart',
-              style: appStyle(14.sp, kDark, FontWeight.w500),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        kPrimary.withValues(alpha: 0.8),
+                        kPrimary.withValues(alpha: 0.6),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20.r),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 30.r,
+                        backgroundColor: Colors.white.withValues(alpha: 0.3),
+                        child: Icon(
+                          Icons.person,
+                          size: 30.sp,
+                          color: kPrimary,
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      ReusableText(
+                        text: 'Foody',
+                        style: appStyle(24.sp, kWhite, FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                ..._buildDrawerItems(context, ref),
+              ],
             ),
-            onTap: () => _navigate(context, '/cart'),
           ),
-          ListTile(
-            leading: Icon(Icons.history, color: kPrimary, size: 24.sp),
-            title: ReusableText(
-              text: 'Order History',
-              style: appStyle(14.sp, kDark, FontWeight.w500),
-            ),
-            onTap: () => _navigate(context, '/history'),
-          ),
-          ListTile(
-            leading: Icon(Icons.logout, color: kPrimary, size: 24.sp),
-            title: ReusableText(
-              text: 'Logout',
-              style: appStyle(14.sp, kDark, FontWeight.w500),
-            ),
-            onTap: () =>_logout(context, ref)
-          ),
-        ],
+        ),
       ),
     );
+  }
+
+  List<Widget> _buildDrawerItems(BuildContext context, WidgetRef ref) {
+    final items = [
+      {'icon': Icons.person, 'text': 'Profile', 'route': '/profile'},
+      {'icon': Icons.shopping_bag, 'text': 'Order', 'route': '/order'},
+      {'icon': Icons.shopping_cart, 'text': 'Cart', 'route': '/cart'},
+      {'icon': Icons.history, 'text': 'Order History', 'route': '/history'},
+      {'icon': Icons.logout, 'text': 'Logout', 'route': null},
+    ];
+
+    return items.map((item) {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+        child: GestureDetector(
+          onTap: () => item['route'] != null
+              ? _navigate(context, item['route'] as String)
+              : _logout(context, ref),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10.r),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 0.5.w),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 5.r,
+                  offset: Offset(0, 2.h),
+                ),
+              ],
+            ),
+            child: ListTile(
+              leading: Icon(
+                item['icon'] as IconData,
+                color: kPrimary,
+                size: 24.sp,
+              ),
+              title: ReusableText(
+                text: item['text'] as String,
+                style: appStyle(14.sp, kWhite, FontWeight.w500),
+              ),
+            ),
+          ),
+        ),
+      );
+    }).toList();
   }
 }

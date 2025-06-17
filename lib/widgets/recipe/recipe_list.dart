@@ -37,25 +37,17 @@ Widget recipeList(FoodRecipesState state) {
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 8.h),
           decoration: BoxDecoration(
-            color: kOffWhite,
-            borderRadius: BorderRadius.circular(16.r),
+            color: Colors.black.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(
+                color: Colors.black.withValues(alpha: 0.1), width: 0.5.w),
             boxShadow: [
               BoxShadow(
-                color: kDark.withValues(alpha: 0.1),
-                spreadRadius: 2,
-                blurRadius: 8,
-                offset: Offset(0, 4),
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 5.r,
+                offset: Offset(0, 2.h),
               ),
             ],
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                kOffWhite,
-                kWhite.withValues(alpha: 0.05),
-              ],
-            ),
-            border: Border.all(color: kPrimary.withValues(alpha: 0.2), width: 1),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,31 +59,31 @@ Widget recipeList(FoodRecipesState state) {
                 ),
                 child: recipe.image != null
                     ? Image.network(
-                  recipe.image!,
-                  width: 120.w,
-                  height: 120.h,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: 120.w,
-                    height: 120.h,
-                    color: kLightWhite,
-                    child: Icon(
-                      Icons.broken_image,
-                      size: 50.sp,
-                      color: kDark.withValues(alpha: 0.5),
-                    ),
-                  ),
-                )
+                        recipe.image!,
+                        width: 120.w,
+                        height: 120.h,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 120.w,
+                          height: 120.h,
+                          color: kLightWhite,
+                          child: Icon(
+                            Icons.broken_image,
+                            size: 50.sp,
+                            color: kDark.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      )
                     : Container(
-                  width: 120.w,
-                  height: 120.h,
-                  color: kLightWhite,
-                  child: Icon(
-                    Icons.image_not_supported,
-                    size: 50.sp,
-                    color: kDark.withValues(alpha: 0.5),
-                  ),
-                ),
+                        width: 120.w,
+                        height: 120.h,
+                        color: kLightWhite,
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 50.sp,
+                          color: kDark.withValues(alpha: 0.5),
+                        ),
+                      ),
               ),
               Expanded(
                 child: Padding(
@@ -114,7 +106,7 @@ Widget recipeList(FoodRecipesState state) {
                       SizedBox(height: 4.h),
                       ReusableText(
                         text:
-                        'Ready in ${recipe.readyInMinutes ?? 0} min • ${recipe.servings ?? 0} servings',
+                            'Ready in ${recipe.readyInMinutes ?? 0} min • ${recipe.servings ?? 0} servings',
                         style: appStyle(
                           12.sp,
                           kDark.withValues(alpha: 0.7),
@@ -131,7 +123,8 @@ Widget recipeList(FoodRecipesState state) {
                           ),
                           SizedBox(width: 4.w),
                           ReusableText(
-                            text: recipe.spoonacularScore?.toStringAsFixed(1) ?? 'N/A',
+                            text: recipe.spoonacularScore?.toStringAsFixed(1) ??
+                                'N/A',
                             style: appStyle(12.sp, kDark, FontWeight.w500),
                           ),
                         ],
