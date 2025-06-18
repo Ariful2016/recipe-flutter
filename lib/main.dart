@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe_flutter/router/app_router.dart';
 import 'package:recipe_flutter/services/notification_service.dart';
+import 'di/notification/notification_provider.dart';
 import 'firebase_options.dart';
 import 'core/constants/constants.dart';
 
@@ -44,8 +45,25 @@ Future<void> main() async {
 
   FlutterNativeSplash.remove();
 
-  runApp(const ProviderScope(child: MainApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        notificationServiceProvider.overrideWith(
+          (ref) {
+            final navigatorKey = ref.watch(navigatorKeyProvider);
+            return NotificationService(navigatorKey: navigatorKey);
+          },
+        ),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
+
+// Global navigator key provider
+final navigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
+  return GlobalKey<NavigatorState>();
+});
 
 class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
@@ -55,11 +73,17 @@ class MainApp extends ConsumerStatefulWidget {
 }
 
 class _MainAppState extends ConsumerState<MainApp> {
+  late final GlobalKey<NavigatorState> _navigatorKey;
+
   @override
   void initState() {
     super.initState();
-// Initialize notifications
-    NotificationService().initialize(context);
+    _navigatorKey = ref.read(navigatorKeyProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notificationService = ref.read(notificationServiceProvider);
+      notificationService
+          .initialize(context); // Use the context from the widget
+    });
   }
 
   @override

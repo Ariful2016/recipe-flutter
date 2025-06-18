@@ -19,7 +19,7 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
     redirect: (BuildContext context, GoRouterState state) async {
-      // Prevent empty location
+// Prevent empty location
       if (state.fullPath == null || state.fullPath!.isEmpty) {
         await FirebaseAnalytics.instance.logEvent(
           name: 'invalid_route',
@@ -30,10 +30,13 @@ class AppRouter {
       return null; // Proceed with the requested route
     },
     errorBuilder: (context, state) {
-      // Handle invalid routes
+// Handle invalid routes
       FirebaseAnalytics.instance.logEvent(
         name: 'route_error',
-        parameters: {'error': state.error.toString(), 'path': state.fullPath ?? 'unknown'},
+        parameters: {
+          'error': state.error.toString(),
+          'path': state.fullPath ?? 'unknown'
+        },
       );
       return Scaffold(
         body: Center(
@@ -113,4 +116,21 @@ class AppRouter {
     ],
     debugLogDiagnostics: true, // Enable for debugging
   );
+
+// Static set of valid route names
+  static final Set<String> validRouteNames = {
+    'splash',
+    'onboarding',
+    'login',
+    'register',
+    'tinderSwipe',
+    'home',
+    'food',
+    'favorite',
+    'joke',
+    'profile',
+    'order',
+    'cart',
+    'history',
+  };
 }
