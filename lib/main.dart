@@ -8,8 +8,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe_flutter/router/app_router.dart';
-import 'core/constants/constants.dart';
+import 'package:recipe_flutter/services/notification_service.dart';
 import 'firebase_options.dart';
+import 'core/constants/constants.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,6 @@ Future<void> main() async {
         .recordError(e, stack, reason: 'Firebase initialization failed');
   }
 
-  // Configure Crashlytics
   const bool fatalError = kDebugMode;
   FlutterError.onError = (errorDetails) {
     if (fatalError) {
@@ -42,14 +42,25 @@ Future<void> main() async {
     return true;
   };
 
-  // Remove splash screen after initialization
   FlutterNativeSplash.remove();
 
   runApp(const ProviderScope(child: MainApp()));
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
+
+  @override
+  ConsumerState<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends ConsumerState<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+// Initialize notifications
+    NotificationService().initialize(context);
+  }
 
   @override
   Widget build(BuildContext context) {
